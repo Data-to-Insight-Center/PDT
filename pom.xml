@@ -3,15 +3,10 @@
 
     <modelVersion>4.0.0</modelVersion>
     <artifactId>sead-pdt</artifactId>
-    <version>2.0.0-SNAPSHOT</version>
+    <groupId>org.sead.va</groupId>
+    <version>${pdt.version}</version>
     <packaging>war</packaging>
     <name>SEAD PDT Webapp</name>
-
-    <parent>
-        <groupId>org.sead.va</groupId>
-        <artifactId>va-parent</artifactId>
-        <version>2.0.0-SNAPSHOT</version>
-    </parent>
 
     <dependencies>
         <dependency>
@@ -111,4 +106,9 @@
         </plugins>
 
     </build>
+
+    <properties>
+        <pdt.version>2.0.0-SNAPSHOT</pdt.version>
+    </properties>
+
 </project>
