@@ -27,18 +27,9 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoCursor;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.result.DeleteResult;
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.ClientResponse.Status;
-import com.sun.jersey.api.client.WebResource;
-import com.sun.research.ws.wadl.Resource;
-import com.sun.xml.bind.v2.runtime.unmarshaller.XsiNilLoader.Array;
-
 import org.bson.Document;
 import org.json.JSONObject;
-import org.seadpdt.people.GooglePlusProvider;
-import org.seadpdt.people.LinkedInProvider;
-import org.seadpdt.people.OrcidProvider;
 import org.seadpdt.people.Profile;
 import org.seadpdt.people.Provider;
 import org.seadpdt.util.MongoDB;
@@ -47,12 +38,9 @@ import javax.ws.rs.*;
 import javax.ws.rs.core.CacheControl;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.ext.Providers;
-
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
-import java.util.HashSet;
 
 @Path("/people")
 public class PeopleServices {
@@ -171,7 +159,7 @@ public class PeopleServices {
 	@GET
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Response getPersonProfile(@PathParam("id") String id) {
+	public static Response getPersonProfile(@PathParam("id") String id) {
 		Profile profile = null;
 		try {
 			profile = Provider.findCanonicalId(id);
@@ -187,7 +175,7 @@ public class PeopleServices {
 		}
 		Document document = retrieveProfile(profile.getIdentifier());
 		if (document != null) {
-			return Response.ok(document.toJson()).cacheControl(control).build();
+			return Response.ok(document.toJson()).build();
 		} else {
 			return Response.status(Status.NOT_FOUND).build();
 		}

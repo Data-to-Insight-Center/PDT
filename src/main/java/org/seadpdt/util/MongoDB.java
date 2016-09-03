@@ -22,9 +22,12 @@
 
 package org.seadpdt.util;
 
+import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.MongoClient;
+import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import org.bson.Document;
 
 public class MongoDB {
 
@@ -72,5 +75,11 @@ public class MongoDB {
     static public DB geOreDB() {
         DB db = getMongoOREClientInstance().getDB(Constants.oreDbName);
         return db;
+    }
+
+    static public MongoCollection<Document> getROIndexed() {
+        MongoCollection<Document> roCollection =  getServicesDB().getCollection(MongoDB.researchObjects);
+        roCollection.createIndex(new BasicDBObject().append("$**", "text"));
+        return roCollection;
     }
 }

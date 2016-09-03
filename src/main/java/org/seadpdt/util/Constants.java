@@ -41,6 +41,8 @@ public class Constants {
 	public static String alternateOf = "alternateOf";
 	public static String alternateOfIRI = "http://www.w3.org/ns/prov#alternateOf";
 
+    public static String successStage = "Success";
+
 	static {
 		try {
 			loadConfigurations();
