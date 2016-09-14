@@ -22,7 +22,7 @@
 package org.seadpdt.people;
 
 import org.json.JSONObject;
-import org.seadpdt.PeopleServices;
+import org.seadpdt.impl.PeopleServicesImpl;
 
 public class Profile {
 	private String provider;
@@ -42,8 +42,8 @@ public class Profile {
 
 	public JSONObject asJson() {
 		JSONObject jsonObject = new JSONObject();
-		jsonObject.put(PeopleServices.provider, getProvider());
-		jsonObject.put(PeopleServices.identifier, getIdentifier());
+		jsonObject.put(PeopleServicesImpl.provider, getProvider());
+		jsonObject.put(PeopleServicesImpl.identifier, getIdentifier());
 		return jsonObject;
 	}
 }

@@ -21,24 +21,19 @@
 
 package org.seadpdt.people;
 
+import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.ClientResponse;
+import com.sun.jersey.api.client.WebResource;
+import org.bson.Document;
+import org.json.JSONObject;
+import org.seadpdt.impl.PeopleServicesImpl;
+
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Properties;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import javax.print.attribute.ResolutionSyntax;
-
-import org.bson.Document;
-import org.json.JSONObject;
-import org.seadpdt.PeopleServices;
-
-import com.mongodb.client.MongoCollection;
-import com.sun.jersey.api.client.Client;
-import com.sun.jersey.api.client.ClientResponse;
-import com.sun.jersey.api.client.WebResource;
 
 public class GooglePlusProvider extends Provider {
 
@@ -76,7 +71,7 @@ public class GooglePlusProvider extends Provider {
 	@Override
 	public Document getExternalProfile(JSONObject person)
 			throws RuntimeException {
-		String id = person.getString(PeopleServices.identifier);
+		String id = person.getString(PeopleServicesImpl.identifier);
 		Client client = Client.create();
 		String rawID = id.substring("https://plus.google.com/".length());
 		WebResource webResource = client
@@ -92,7 +87,7 @@ public class GooglePlusProvider extends Provider {
 
 		Document rawProfile = Document.parse(profile);
 		Document personDocument = new Document();
-		personDocument.put(PeopleServices.provider, getProviderName());
+		personDocument.put(PeopleServicesImpl.provider, getProviderName());
 		//assert(rawProfile.getString("url").equals(id));
 		personDocument.put("@id", rawProfile.getString("url"));
 		Document nameDocument = (Document) rawProfile.get("name");

@@ -33,7 +33,7 @@
         <dependency>
             <groupId>com.sun.jersey.contribs</groupId>
             <artifactId>jersey-multipart</artifactId>
-            <version>1.10</version>
+            <version>1.8</version>
         </dependency>
         <dependency>
             <groupId>org.mongodb</groupId>
@@ -49,6 +49,11 @@
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
             <version>20140107</version>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.enunciate</groupId>
+            <artifactId>enunciate-rt</artifactId>
+            <version>1.29</version>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>
@@ -99,6 +104,22 @@
                     <execution>
                         <goals>
                             <goal>jar</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.enunciate</groupId>
+                <artifactId>maven-enunciate-plugin</artifactId>
+                <version>1.30</version>
+                <configuration>
+                    <configFile>enunciate.xml</configFile>
+                    <xml disabled="false" />
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>assemble</goal>
                         </goals>
                     </execution>
                 </executions>

@@ -21,28 +21,21 @@
 
 package org.seadpdt.people;
 
-import java.util.ArrayList;
-import java.util.Collection;
-
-import javax.ws.rs.core.Response;
-
-import org.bson.Document;
-import org.json.JSONObject;
-import org.seadpdt.PeopleServices;
-
-import com.mongodb.BasicDBObject;
-import com.mongodb.client.MongoCollection;
-import com.mongodb.diagnostics.logging.Logger;
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
+import org.bson.Document;
+import org.json.JSONObject;
+import org.seadpdt.impl.PeopleServicesImpl;
+
+import java.util.ArrayList;
 
 public class OrcidProvider extends Provider {
 
 	@Override
 	public Document getExternalProfile(JSONObject person)
 			throws RuntimeException {
-		String id = person.getString(PeopleServices.identifier);
+		String id = person.getString(PeopleServicesImpl.identifier);
 		Document profile = null;
 		if (id != null) {
 			// id should be canonical already
@@ -58,7 +51,7 @@ public class OrcidProvider extends Provider {
 	private Document generateProfile(String id) {
 
 		Document personDocument = new Document();
-		personDocument.put(PeopleServices.provider, getProviderName());
+		personDocument.put(PeopleServicesImpl.provider, getProviderName());
 
 		Document rawDocument = getRawProfile(id);
 		personDocument.put("@id",

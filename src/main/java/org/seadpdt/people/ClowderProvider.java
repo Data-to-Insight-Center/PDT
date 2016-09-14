@@ -25,7 +25,7 @@ import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
 import org.bson.Document;
 import org.json.JSONObject;
-import org.seadpdt.PeopleServices;
+import org.seadpdt.impl.PeopleServicesImpl;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -37,7 +37,7 @@ public class ClowderProvider extends Provider {
     @Override
     public Document getExternalProfile(JSONObject person)
             throws RuntimeException {
-        String id = person.getString(PeopleServices.identifier);
+        String id = person.getString(PeopleServicesImpl.identifier);
         Document profile = null;
         if (id != null) {
             // id should be canonical already
@@ -53,7 +53,7 @@ public class ClowderProvider extends Provider {
     private Document generateProfile(String id) {
 
         Document personDocument = new Document();
-        personDocument.put(PeopleServices.provider, getProviderName());
+        personDocument.put(PeopleServicesImpl.provider, getProviderName());
 
         Document rawDocument = getRawProfile(id);
         personDocument.put("@id", getCanonicalId(rawDocument.get("id").toString()));
