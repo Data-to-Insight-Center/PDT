@@ -38,5 +38,9 @@
         <servlet-name>Jersey REST Service for SEAD PDT</servlet-name>
         <url-pattern>/*</url-pattern>
     </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>default</servlet-name>
+        <url-pattern>/doc/*</url-pattern>
+    </servlet-mapping>
 </web-app>
 
