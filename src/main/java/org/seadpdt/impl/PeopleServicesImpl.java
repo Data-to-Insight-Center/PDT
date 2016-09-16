@@ -172,13 +172,16 @@ public class PeopleServicesImpl extends PeopleServices{
 		}
 		if (profile == null) {
 			return Response.status(Response.Status.NOT_FOUND)
+                    .entity(new BasicDBObject("failure", "Person with identifier " + id + " not found"))
 					.build();
 		}
 		Document document = retrieveProfile(profile.getIdentifier());
 		if (document != null) {
 			return Response.ok(document.toJson()).build();
 		} else {
-			return Response.status(Status.NOT_FOUND).build();
+			return Response.status(Status.NOT_FOUND)
+                    .entity(new BasicDBObject("failure", "Person with identifier " + id + " not found"))
+                    .build();
 		}
 	}
 
@@ -197,6 +200,7 @@ public class PeopleServicesImpl extends PeopleServices{
 		}
 		if (profile == null) {
 			return Response.status(Response.Status.NOT_FOUND)
+                    .entity(new BasicDBObject("failure", "Person with identifier " + id + " not found"))
 					.build();
 		}
 		id = profile.getIdentifier();
@@ -215,10 +219,12 @@ public class PeopleServicesImpl extends PeopleServices{
 			}
 
 			peopleCollection.replaceOne(new Document("@id", id), profileDoc);
-			return Response.status(Status.OK).build();
+			return Response.ok(new BasicDBObject("response", "Successfully updated person with identifier " + id)).build();
 
 		} else {
-			return Response.status(Status.NOT_FOUND).build();
+			return Response.status(Status.NOT_FOUND)
+                    .entity(new BasicDBObject("failure", "Person with identifier " + id + " not found"))
+                    .build();
 
 		}
 	}
@@ -237,29 +243,20 @@ public class PeopleServicesImpl extends PeopleServices{
 		}
 		if (profile == null) {
 			return Response.status(Response.Status.NOT_FOUND)
+                    .entity(new BasicDBObject("failure", "Person with identifier " + id + " not found"))
 					.build();
 		}
 		id = profile.getIdentifier();
 		DeleteResult result = peopleCollection
 				.deleteOne(new Document("@id", id));
 		if (result.getDeletedCount() == 0) {
-			return Response.status(Status.NOT_FOUND).build();
+			return Response.status(Status.NOT_FOUND)
+                    .entity(new BasicDBObject("failure", "Person with identifier " + id + " not found"))
+                    .build();
 		} else {
-			return Response.status(Status.OK).build();
+			return Response.ok(new BasicDBObject("response", "Successfully deleted person with identifier " + id)).build();
 		}
 	}
-
-	/*
-	 * Convenience method to get the canonical ID associated with the given id
-	 * string
-	 *
-	 * @result canonical form or 404 if not a recognized identifier, CONFLICT if
-	 * ambiguous
-	 *
-	 * Note: does not imply that a profile has been retrieved for the ID Note:
-	 * not exposed via the sead-c3pr api / for internal use, e.g. by matchmaker
-	 * rightsholder rule
-	 */
 
 	@GET
 	@Path("/canonical/{id}")
@@ -276,6 +273,7 @@ public class PeopleServicesImpl extends PeopleServices{
 		}
 		if (profile == null) {
 			return Response.status(Response.Status.NOT_FOUND)
+                    .entity(new BasicDBObject("failure", "Person with identifier " + id + " not found"))
 					.build();
 		}
 		return Response.ok(profile.getIdentifier()).build();

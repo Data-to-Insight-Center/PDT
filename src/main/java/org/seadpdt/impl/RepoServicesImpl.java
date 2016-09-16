@@ -126,7 +126,9 @@ public class RepoServicesImpl extends RepoServices{
 			document.remove("_id");
 			return Response.ok(document.toJson()).cacheControl(control).build();
 		} else {
-			return Response.status(Status.NOT_FOUND).build();
+			return Response.status(Status.NOT_FOUND)
+                    .entity(new BasicDBObject("failure", "Repository with identifier " + id + " not found"))
+                    .build();
 		}
 	}
 
@@ -143,10 +145,12 @@ public class RepoServicesImpl extends RepoServices{
 			Document document = Document.parse(profile);
 			repositoriesCollection.replaceOne(
 					new Document("orgidentifier", id), document);
-			return Response.status(Status.OK).build();
+			return Response.ok(new BasicDBObject("response", "Successfully unregistered repository with identifier " + id)).build();
 
 		} else {
-			return Response.status(Status.NOT_FOUND).build();
+			return Response.status(Status.NOT_FOUND)
+                    .entity(new BasicDBObject("failure", "Repository with identifier " + id + " not found"))
+                    .build();
 		}
 	}
 
@@ -156,9 +160,11 @@ public class RepoServicesImpl extends RepoServices{
 		DeleteResult result = repositoriesCollection.deleteOne(new Document(
 				"orgidentifier", id));
 		if (result.getDeletedCount() == 0) {
-			return Response.status(Status.NOT_FOUND).build();
+			return Response.status(Status.NOT_FOUND)
+                    .entity(new BasicDBObject("failure", "Repository with identifier " + id + " not found"))
+                    .build();
 		} else {
-			return Response.status(Status.OK).build();
+			return Response.ok(new BasicDBObject("response", "Successfully deleted repository with identifier " + id)).build();
 		}
 	}
 

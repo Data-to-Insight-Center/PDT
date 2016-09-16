@@ -26,11 +26,53 @@ import javax.ws.rs.core.Response;
 @Path("/search")
 public abstract class SearchService {
 
+    /**
+     * Return the list of research objects
+     *
+     * @param repoName
+     *            Optional query parameter to specify the repository
+     * @return [</br>
+     * 			&ensp;{</br>
+     * 			 &ensp;&ensp;"Publication Date": &lt;publication date of the research object&gt;,</br>
+     * 			 &ensp;&ensp;"Repository": &lt;repository&gt;,</br>
+     * 			 &ensp;&ensp;"Creator": &lt;creators(s)&gt;,</br>
+     * 			 &ensp;&ensp;"Title": &lt;title&gt;,</br>
+     * 			 &ensp;&ensp;"Abstract": &lt;abstract&gt;</br>
+     * 			&ensp;}</br>
+     * 		   ]
+     */
     @GET
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
     public abstract Response getAllPublishedROs(@QueryParam("repo") String repoName);
 
+    /**
+     *
+     * Return the list of research objects filtered by filterString
+     *
+     * @param repoName
+     *            Optional query parameter to specify the repository
+     *
+     * @param filterString
+     *          {</br>
+     *             &ensp;Creator: &lt;creator search string&gt;,</br>
+     *              &ensp;End Date: &lt;end date in MM/dd/yyyy format&gt;,</br>
+     *              &ensp;Start Date: &lt;start date in MM/dd/yyyy format&gt;,</br>
+     *              &ensp;Title: &lt;title search string&gt;,</br>
+     *              &ensp;Search String: &lt;search string to be searched across all the fields&gt;</br>
+     *          }
+     *
+     * @return [</br>
+     * 			&ensp;{</br>
+     * 			 &ensp;&ensp;"Publication Date": &lt;publication date of the research object&gt;,</br>
+     * 			 &ensp;&ensp;"Repository": &lt;repository&gt;,</br>
+     * 			 &ensp;&ensp;"Creator": &lt;creators(s)&gt;,</br>
+     * 			 &ensp;&ensp;"Title": &lt;title&gt;,</br>
+     * 			 &ensp;&ensp;"Abstract": &lt;abstract&gt;</br>
+     * 			&ensp;}</br>
+     * 		   ]
+     *
+     */
     @POST
     @Path("/")
     @Consumes(MediaType.APPLICATION_JSON)
