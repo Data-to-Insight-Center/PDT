@@ -307,21 +307,32 @@ public class ROServicesImpl extends ROServices {
 				return Response.status(ClientResponse.Status.OK).build();
 
 			} else {
-				return Response.status(ClientResponse.Status.NOT_FOUND).build();
+				return Response.status(ClientResponse.Status.NOT_FOUND)
+                        .entity(new JSONObject().put("Error", "Error while updating status"))
+                        .build();
 
 			}
 		} catch (org.bson.BsonInvalidOperationException e) {
-			return Response.status(ClientResponse.Status.BAD_REQUEST).build();
+			return Response.status(ClientResponse.Status.BAD_REQUEST)
+                    .entity(new JSONObject().put("Error", "Error while updating status"))
+                    .build();
 		}
 	}
 
-	@GET
+    @GET
 	@Path("/{id}/status")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Response getROStatus(@PathParam("id") String id) {
 		FindIterable<Document> iter = publicationsCollection.find(new Document(
 				"Aggregation.Identifier", id));
 		iter.projection(new Document("Status", 1).append("_id", 0));
+
+        if (iter == null || iter.first() == null) {
+            return Response
+                    .status(ClientResponse.Status.NOT_FOUND)
+                    .entity(new JSONObject().put("Error", "Cannot find RO with id " + id).toString())
+                    .build();
+        }
 
 		Document document = iter.first();
 		document.remove("_id");
@@ -513,7 +524,9 @@ public class ROServicesImpl extends ROServices {
         if(iter != null && iter.first() != null){
             return Response.ok(iter.first().get("metadata").toString()).build();
         } else {
-            return Response.status(ClientResponse.Status.NOT_FOUND).build();
+            return Response.status(ClientResponse.Status.NOT_FOUND)
+                    .entity(new JSONObject().put("Error", "Cannot find RO with id " + id).toString())
+                    .build();
         }
     }
 
@@ -543,7 +556,9 @@ public class ROServicesImpl extends ROServices {
         if(iter != null && iter.first() != null){
             return Response.ok("{\"roId\" : \"" + ((Document)iter.first().get("Aggregation")).get("Identifier").toString() + "\" }").build();
         } else {
-            return Response.status(ClientResponse.Status.NOT_FOUND).build();
+            return Response.status(ClientResponse.Status.NOT_FOUND)
+                    .entity(new JSONObject().put("Error", "Cannot find RO with PID " + pid).toString())
+                    .build();
         }
     }
 
@@ -569,11 +584,15 @@ public class ROServicesImpl extends ROServices {
                 DeleteOverrideRO(oldRoId);
                 return Response.status(ClientResponse.Status.OK).build();
             } else {
-                return Response.status(ClientResponse.Status.NOT_FOUND).build();
+                return Response.status(ClientResponse.Status.NOT_FOUND)
+                        .entity(new JSONObject().put("Error", "Error while deprecating RO"))
+                        .build();
 
             }
         } catch (org.bson.BsonInvalidOperationException e) {
-            return Response.status(ClientResponse.Status.BAD_REQUEST).build();
+            return Response.status(ClientResponse.Status.BAD_REQUEST)
+                    .entity(new JSONObject().put("Error", "Error while deprecating RO"))
+                    .build();
         }
     }
 

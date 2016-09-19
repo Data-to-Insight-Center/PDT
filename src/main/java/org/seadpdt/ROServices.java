@@ -36,27 +36,28 @@ public abstract class ROServices {
      * Request publication of a new research object
      *
      * @param publicationRequestString
-     *            {Aggregation, &lt;ContentObject&gt;, Preferences, {&lt;Preferences
-     *            list&gt;}, Aggregation Statistics {&lt;Aggregation Statistics List
-     *            &gt; Repository, &lt;RepositoryId&gt;}}
-     *
-     * <br>
+     *            {
+     *            &ensp;"@context": [], </br>
+     *            &ensp;Aggregation: &lt;ContentObject&gt;, </br>
+     *            &ensp;Preferences: {&lt;Preferences list&gt;}, </br>
+     *            &ensp;Aggregation Statistics: {&lt;Aggregation Statistics List&gt;}, </br>
+     *            &ensp;Repository: {&lt;RepositoryId&gt;}</br>
+     *            }<br>
      *            where Content is a json object including basic metadata and
      *            the unique ID for the entity the user wants to publish. <br>
      *            preferences is a json list of options chosen from those
-     *            available (see api ____) <br>
-     *            Respository is the ID of the repository as defined within SEAD
-     *            (see api _______) Project Space is the base URL for the source
-     *            Project Space
+     *            available. <br>
+     *            Repository is the ID of the repository as defined within SEAD.</br>
      *
-     * @see Example input file: _______ <br>
-     *      Example output file: _______
+     * @param requestURL
+     *          request URL of the API
      *
-     * @return 200: {response: "success", id : &lt;ID&gt;} <br>
-     *         400: {response: "failure", reason : &lt;string&gt;} <br>
-     *         401: {response: "failure", reason : &lt;string&gt;} 409 Conflict:
-     *         {response: "failure", reason : &lt;string&gt;}
+     * @param oreId
+     *          MongoDB document ID of the OREMap associated with the research object
      *
+     *
+     * @return 201 Created : {identifier: &lt;research object identifier&gt;} <br>
+     *         400 Bad Request: &lt;failure string&gt; <br>
      *
      */
 	@POST
@@ -73,7 +74,14 @@ public abstract class ROServices {
      * @param  purpose
      *             filter by the purpose flag of the research object; the values for the 'purpose' can be 'Production' or 'Testing-Only'
      *
-     * @return Aggegation (Title, Identifier), Repository, and Status array
+     * @return 200 : [<br>
+     * 			&ensp;{<br>
+     * 		    &ensp;&ensp;Status: [array of statuses],<br>
+     * 		    &ensp;&ensp;Aggregation Statistics: {&lt;Aggregation Statistics List&gt;}, </br>
+     * 		    &ensp;&ensp;Repository: {&lt;RepositoryId&gt;}</br>
+     * 		    &ensp;}, ...<br>
+     * 		   ]<br>
+     * 		   400 Bad Request: {Error: &lt;string&gt;} <br>
      */
 	@GET
 	@Path("/")
@@ -86,7 +94,14 @@ public abstract class ROServices {
      * @param  purpose
      *             filter by the purpose flag of the research object; the values for the 'purpose' can be 'Production' or 'Testing-Only'
      *
-     * @return Aggegation (Title, Identifier), Repository, and Status array
+     * @return 200 : [<br>
+     * 			&ensp;{<br>
+     * 		    &ensp;&ensp;Status: [array of statuses],<br>
+     * 		    &ensp;&ensp;Aggregation Statistics: {&lt;Aggregation Statistics List&gt;}, </br>
+     * 		    &ensp;&ensp;Repository: {&lt;RepositoryId&gt;}</br>
+     * 		    &ensp;}, ...<br>
+     * 		   ]<br>
+     * 		   400 Bad Request: {Error: &lt;string&gt;} <br>
      */
 	@GET
 	@Path("/new/")
@@ -99,7 +114,9 @@ public abstract class ROServices {
      * @param id
      *            the assigned ro/publication ID
      *
-     * @return : json-ld profile document
+     * @return 200 OK: &lt;research object profile&gt; <br>
+     *         404 Not Found:  {Error: &lt;string&gt;} <br>
+     *         301 Moved Permanently:  {Error: &lt;string&gt;} <br>
      */
 	@GET
 	@Path("/{id}")
@@ -107,21 +124,16 @@ public abstract class ROServices {
 	public abstract Response getROProfile(@PathParam("id") String id) ;
 
     /**
-     * Update the status for a given publication / ro
-     * Reporter: the entity sending status, e.g. repository (use the orgidentifier term used as an id in repository profiles)
-     * Stage: short string describing stage: Recommended values are "Receipt Acknowledged", "Pending", "Success", "Failure"
-     * Message" longer string describing the status. For "Success", the message MUST be the persistent identifier assigned to the research object
-     *
-     * A timestamp will be appended by the services.
-     *
-     * Body : { "reporter": <reporter>, "Stage": <stage>, "message":<message> }
-     *
+     * Update the status for a given publication/ro
      *
      * @param id
-     *            the assigned repository ID
+     *            the assigned ro/publication ID
+     * @param state
+     *            Body : { "reporter": &lt;reporter&gt;, "stage": &lt;stage&gt;, "message": &lt;message&gt; }
      *
-     * @return 200 OK: {response: "success", id : &lt;ID&gt;} <br>
-     *         400 Bad Request: {response: "failure", reason : &lt;string&gt;} <br>
+     * @return 200 OK: Upon successful update of status <br>
+     *         404 Not Found:  {Error: &lt;string&gt;} <br>
+     *         400 Bad Request:  {Error: &lt;string&gt;} <br>
      */
 	@POST
 	@Path("/{id}/status")
@@ -134,7 +146,8 @@ public abstract class ROServices {
      * @param id
      *            the assigned ro/publication ID
      *
-     * @return : json-ld profile document
+     * @return 200 OK: &lt;research object status array&gt; <br>
+     *         404 Not Found:  {Error: &lt;string&gt;} <br>
      */
 	@GET
 	@Path("/{id}/status")
@@ -142,13 +155,14 @@ public abstract class ROServices {
 	public abstract Response getROStatus(@PathParam("id") String id) ;
 
     /**
-     * Rescind a publication request and mark it as obsolete
+     * Rescind a publication request
      *
      * @param id
      *            the assigned publication/ro ID
      *
-     * @return 200 OK: {response: "success", id : &lt;ID&gt;} <br>
-     *         400 Bad Request: {response: "failure", reason : &lt;string&gt;} <br>
+     * @return 200 OK: &lt;"RO Successfully Deleted"&gt; <br>
+     *         404 Not Found:  &lt;error message&gt; <br>
+     *         400 Bad Request: &lt;error message&gt; <br>
      */
 	@DELETE
 	@Path("/{id}")
@@ -156,13 +170,13 @@ public abstract class ROServices {
 
     /**
      * This is a management method
-     * Rescind a publication request and mark it as obsolete, overriding the permission granted to the API
+     * Rescind a publication request and mark it as obsolete, overriding the permission restricted in the API
      *
      * @param id
      *            the assigned publication/ro ID
      *
-     * @return 200 OK: {response: "success", id : &lt;ID&gt;} <br>
-     *         400 Bad Request: {response: "failure", reason : &lt;string&gt;} <br>
+     * @return 200 OK: &lt;"RO Successfully Deleted"&gt; <br>
+     *         404 Not Found:  &lt;error message&gt; <br>
      */
     @DELETE
     @Path("/{id}/override")
@@ -191,7 +205,8 @@ public abstract class ROServices {
      * @param id
      *            the assigned ro/publication ID
      *
-     * @return : json-ld profile document
+     * @return 200 OK: &lt;ORE Map&gt; <br>
+     *         404 Not Found:  {Error: &lt;string&gt;} <br>
      */
     @GET
     @Path("/{id}/oremap")
@@ -232,7 +247,8 @@ public abstract class ROServices {
      * @param id
      *            the assigned ro/publication ID
      *
-     * @return : FGDC metadata document
+     * @return 200 OK: &lt;FGDC metadata document&gt; <br>
+     *         404 Not Found:  {Error: &lt;string&gt;} <br>
      */
     @GET
     @Path("/{id}/fgdc")
@@ -245,7 +261,8 @@ public abstract class ROServices {
      * @param pid
      *            PID
      *
-     * @return : 200 OK: {roId: &lt;RO ID&gt;} <br>
+     * @return  200 OK: {roId: &lt;RO ID&gt;} <br>
+     *          404 Not Found:  {Error: &lt;string&gt;} <br>
      */
     @GET
     @Path("/pid/{pid}")
@@ -254,10 +271,15 @@ public abstract class ROServices {
 
     /**
      * Deprecate oldRO by newRO. Delete the old RO request and OREMap
+     *
      * @param newRoId
      *            RO ID of new Research Object
      * @param oldRoId
      *            RO ID of old Research Object
+     *
+     * @return 200 OK: Upon successful deprecation of oldRO <br>
+     *           404 Not Found:  {Error: &lt;string&gt;} <br>
+     *           400 Bad Request:  {Error: &lt;string&gt;} <br>
      */
     @GET
     @Path("/deprecate/{newRO}/{oldRO}")
