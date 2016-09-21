@@ -61,6 +61,18 @@ public abstract class PeopleServices {
 	public abstract Response getPeopleList();
 
     /**
+     * Return the list of people as an Array
+     *
+     * @return [ <br>
+     *          &ensp;{"@id":&lt;person_id&gt;, "email":&lt;email&gt;, "givenName" : &lt;given_name&gt;, ..., "@context" : {} },<br>
+     *         ]
+     */
+    @GET
+    @Path("/list/")
+    @Produces(MediaType.APPLICATION_JSON)
+    public abstract Response getPeopleListAsArray();
+
+    /**
      * Return the profile for a given person
      *
      * @param id

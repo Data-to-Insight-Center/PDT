@@ -29,6 +29,7 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.result.DeleteResult;
 import com.sun.jersey.api.client.ClientResponse.Status;
 import org.bson.Document;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.seadpdt.PeopleServices;
 import org.seadpdt.people.Profile;
@@ -156,6 +157,24 @@ public class PeopleServicesImpl extends PeopleServices{
 		return Response.ok(peopleDocument.toJson()).cacheControl(control)
 				.build();
 	}
+
+    @GET
+    @Path("/list/")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getPeopleListAsArray() {
+        FindIterable<Document> iter = peopleCollection.find();
+        iter.projection(getBasicPersonProjection());
+
+        MongoCursor<Document> cursor = iter.iterator();
+        JSONArray array = new JSONArray();
+        while (cursor.hasNext()) {
+            Document next = cursor.next();
+            next.put("@context", getPersonContext());
+            array.put(next);
+        }
+        return Response.ok(array.toString()).cacheControl(control)
+                .build();
+    }
 
 	@GET
 	@Path("/{id}")
