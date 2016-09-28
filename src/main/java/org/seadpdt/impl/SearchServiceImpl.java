@@ -176,6 +176,8 @@ public class SearchServiceImpl extends SearchService{
                 .append("Aggregation.Title", 1)
                 .append("Aggregation.Contact", 1)
                 .append("Aggregation.Abstract", 1)
+                .append("Aggregation.Publishing Project Name", 1)
+                .append("Aggregation.Publishing Project", 1)
 //                .append("Aggregation.Creation Date", 1)
                 .append("_id", 0));
     }
@@ -187,7 +189,7 @@ public class SearchServiceImpl extends SearchService{
             doc.append(key, agg.get(key));
         }
         doc.remove("Aggregation");
-        doc.remove("Identifier");
+        //doc.remove("Identifier");
         // extract doi and remove Status
         ArrayList<Document> statusArray = (ArrayList<Document>) doc.get("Status");
         String doi = "Not Found";

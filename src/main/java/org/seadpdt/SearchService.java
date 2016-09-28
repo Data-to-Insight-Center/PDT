@@ -37,7 +37,9 @@ public abstract class SearchService {
      * 			 &ensp;&ensp;"Repository": &lt;repository&gt;,</br>
      * 			 &ensp;&ensp;"Creator": &lt;creators(s)&gt;,</br>
      * 			 &ensp;&ensp;"Title": &lt;title&gt;,</br>
-     * 			 &ensp;&ensp;"Abstract": &lt;abstract&gt;</br>
+     * 			 &ensp;&ensp;"Abstract": &lt;abstract&gt;,</br>
+     * 			 &ensp;&ensp;"Publishing Project": &lt;publishing project&gt;,</br>
+     * 			 &ensp;&ensp;"Publishing Project Name": &lt;publishing project name&gt;</br>
      * 			&ensp;}</br>
      * 		   ]
      */
@@ -68,7 +70,9 @@ public abstract class SearchService {
      * 			 &ensp;&ensp;"Repository": &lt;repository&gt;,</br>
      * 			 &ensp;&ensp;"Creator": &lt;creators(s)&gt;,</br>
      * 			 &ensp;&ensp;"Title": &lt;title&gt;,</br>
-     * 			 &ensp;&ensp;"Abstract": &lt;abstract&gt;</br>
+     * 			 &ensp;&ensp;"Abstract": &lt;abstract&gt;,</br>
+     * 			 &ensp;&ensp;"Publishing Project": &lt;publishing project&gt;,</br>
+     * 			 &ensp;&ensp;"Publishing Project Name": &lt;publishing project name&gt;</br>
      * 			&ensp;}</br>
      * 		   ]
      *
