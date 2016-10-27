@@ -36,6 +36,7 @@ public class Constants {
 	public static String oreDbName;
 
 	public static boolean deleteTestRO;
+	public static String clowderUrlPrefix;
 
 	public static String serviceName = "SEAD-C3PR";
 	public static String alternateOf = "alternateOf";
@@ -65,5 +66,6 @@ public class Constants {
                 "27018"));
 		oreDbName = props.getProperty("ore.db.name", "sead-ore");
 		deleteTestRO = Boolean.parseBoolean(props.getProperty("delete.test.ro", "false"));
+		clowderUrlPrefix = props.getProperty("clowder.provider.url.prefix", "https://sead2-dev.ncsa.illinois.edu/api/users/");
 	}
 }

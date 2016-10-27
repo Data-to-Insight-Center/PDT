@@ -26,6 +26,7 @@ import com.sun.jersey.api.client.WebResource;
 import org.bson.Document;
 import org.json.JSONObject;
 import org.seadpdt.impl.PeopleServicesImpl;
+import org.seadpdt.util.Constants;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -33,7 +34,7 @@ import java.util.regex.Pattern;
 public class ClowderProvider extends Provider {
 
 	//FixMe - this should be configurable/pulled form properties at some point
-	static public String idPrefix = "https://sead2-beta.ncsa.illinois.edu/api/users/";
+	static public String idPrefix = Constants.clowderUrlPrefix;
     @Override
     public Document getExternalProfile(JSONObject person)
             throws RuntimeException {
