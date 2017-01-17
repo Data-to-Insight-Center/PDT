@@ -211,15 +211,14 @@ public class SearchServiceImpl extends SearchService{
         Object creator = doc.get("Creator");
         if (creator instanceof String) {
             String creatorId = doc.getString("Creator");
-            doc.put("Creator", getPersonName(creatorId));
+            doc.put("CreatorName", getPersonName(creatorId));
         } else if (creator instanceof ArrayList) {
             ArrayList<String> creatorIds = (ArrayList<String>) creator;
             ArrayList<String> creatorNames = new ArrayList<String>();
             for (String id : creatorIds) {
                 creatorNames.add(getPersonName(id));
             }
-            doc.remove("Creator");
-            doc.put("Creator", creatorNames);
+            doc.put("CreatorName", creatorNames);
         }
 
         doc.remove("Status");
